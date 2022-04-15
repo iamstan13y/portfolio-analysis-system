@@ -57,7 +57,7 @@ namespace UserManagement.API.Models.Repository
                 {
                       To = account.Email,
                       Subject = _configuration["EmailService:ConfirmAccountSubject"],
-                      Body = string.Format(_configuration["EmailService:ConfirmAccountBody"], account.BeneficiaryName, code)  
+                      Body = string.Format(_configuration["EmailService:ConfirmAccountBody"], "", code)  
                 });
 
                 return new Result<Account>(account, new List<string> { "Account created successfully!"});

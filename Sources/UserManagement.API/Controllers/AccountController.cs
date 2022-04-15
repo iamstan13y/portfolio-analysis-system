@@ -26,7 +26,7 @@ namespace UserManagement.API.Controllers
         {
             var result = await _accountRepository.CreateAsync(new Account
             {
-                BeneficiaryName = request.BeneficiaryName,
+                AccountType = request.AccountType,
                 Email = request.Email,
                 Password = request.Password,
                 PhoneNumber = request.PhoneNumber,
