@@ -49,8 +49,8 @@ namespace UserManagement.API.Controllers
         }
 
         [HttpPost("login")]
-        [ProducesResponseType(typeof(Result<Account>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Result<Account>), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(Result<object>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result<object>), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var result = await _accountRepository.LoginAsync(request);

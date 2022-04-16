@@ -107,17 +107,21 @@ namespace UserManagement.API.Models.Repository
             return new Result<Account>(account, new List<string>(){"Account activated successfully!"});
         }
 
-        public async Task<Result<Account>> LoginAsync(LoginRequest login)
+        public async Task<Result<object>> LoginAsync(LoginRequest login)
         {
             var account = await _context.Accounts!.Where(x => x.Email == login.Email).FirstOrDefaultAsync();
 
+            object? userProfile = account!.AccountType == AccountType.Individual ?
+                await _context.Individuals!.Where(x => x.AccountId == account.Id).FirstOrDefaultAsync() :
+                await _context.Institutions!.Where(x => x.AccountId == account.Id).FirstOrDefaultAsync();
+
             if (account == null || _passwordService.VerifyHash(login.Password!, account!.Password!) == false)
-                return new Result<Account>(false, new List<string>() { "Username or password is incorrect!" });
+                return new Result<object>(false, new List<string>() { "Username or password is incorrect!" });
 
             account.Token = await _jwtService.GenerateToken(account);
             account.Password = "*************";
 
-            return new Result<Account>(account);
+            return new Result<object>(userProfile!);
         }
 
         private bool IsUniqueUser(string email)
