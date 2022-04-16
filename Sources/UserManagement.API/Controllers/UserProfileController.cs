@@ -34,5 +34,21 @@ namespace UserManagement.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("institution/create-profile")]
+        public async Task<IActionResult> Add(InstitutionProfileRequest request)
+        {
+            var result = await _userProfileRepository.CreateInstitutionAsync(new Institution
+            {
+                AccountId = request.AccountId,
+                Address = request.Address,
+                InsitutionName = request.InstitutionName,
+                DateCreated= DateTime.Now
+            });
+
+            if (result.Success == false) return BadRequest(result);
+
+            return Ok(result);
+        }
     }
 }

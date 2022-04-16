@@ -3,6 +3,6 @@
     public enum AccountType
     {
         Individual = 1,
-        Enterprise
+        Institution
     }
 }
