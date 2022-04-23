@@ -13,9 +13,19 @@ namespace Analysis.API.Models.Repository
             _context = context;
         }
 
-        public Task<Result<Stock>> AddAsync(Stock stock)
+        public async Task<Result<Stock>> AddAsync(Stock stock)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _context.AddAsync(stock);
+                await _context.SaveChangesAsync();
+
+                return new Result<Stock>(stock);
+            }
+            catch (Exception ex)
+            {
+                return new Result<Stock>(false, new List<string> { ex.ToString() });
+            }
         }
 
         public async Task<Result<IEnumerable<Stock>>> GetAllAsync()
