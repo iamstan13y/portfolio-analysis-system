@@ -1,4 +1,4 @@
-﻿namespace UserManagement.API.Enums
+﻿namespace ModelLibrary.Enums
 {
     public enum AccountType
     {
