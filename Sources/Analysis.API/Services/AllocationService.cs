@@ -26,10 +26,12 @@ namespace Analysis.API.Services
 
             var stocks = (await _stockRepository.GetAllAsync()).Data;
 
-            for (int i = 0; i < allocation.Period, i++)
+            for (int i = 0; i < allocation.Period; i++)
             {
-                var 
+                //           var 
             }
+
+            return null;
         }
     }
 }

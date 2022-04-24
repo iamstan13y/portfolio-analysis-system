@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using ModelLibrary;
+using ModelLibrary.Enums;
 
 namespace UserManagement.API.Models.Repository
 {
