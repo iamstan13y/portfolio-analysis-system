@@ -1,7 +1,11 @@
-﻿namespace Analysis.API.Services
+﻿using Analysis.API.Models.Data;
+using Analysis.API.Models.Local;
+using ModelLibrary;
+
+namespace Analysis.API.Services
 {
     public interface IAllocationService
     {
-        Task<Allocation>
+        Task<Result<Allocation>> CalculateAllocationAsync(AllocationRequest request);
     }
 }
