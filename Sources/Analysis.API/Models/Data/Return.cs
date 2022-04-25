@@ -2,7 +2,7 @@
 {
     public class Return
     {
-        public DateTime Year { get; set; }
+        public int Year { get; set; }
         public double CumulatedReturn { get; set; }
     }
 }

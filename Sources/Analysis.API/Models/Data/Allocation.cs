@@ -9,6 +9,6 @@ namespace Analysis.API.Models.Data
         public ProfileType ProfileType { get; set; }
         public double StartingAmount { get; set; }
         public int Period { get; set; }
-        public IEnumerable<Return>? Returns { get; set; }
+        public List<Return>? Returns { get; set; }
     }
 }
