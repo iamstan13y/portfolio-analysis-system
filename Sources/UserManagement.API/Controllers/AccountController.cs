@@ -30,7 +30,7 @@ namespace UserManagement.API.Controllers
                 Email = request.Email,
                 Password = request.Password,
                 PhoneNumber = request.PhoneNumber,
-                Status =  Status.Disabled,
+                Status =  Status.Unverified,
                 DateCreated = DateTime.Now,
             });
 

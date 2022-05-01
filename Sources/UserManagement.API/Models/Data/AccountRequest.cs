@@ -1,4 +1,5 @@
-﻿using UserManagement.API.Enums;
+﻿using ModelLibrary.Enums;
+using UserManagement.API.Enums;
 
 namespace UserManagement.API.Models.Data
 {

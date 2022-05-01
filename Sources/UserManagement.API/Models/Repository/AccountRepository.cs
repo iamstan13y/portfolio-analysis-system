@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using ModelLibrary;
+using ModelLibrary.Enums;
 
 namespace UserManagement.API.Models.Repository
 {
@@ -101,9 +102,9 @@ namespace UserManagement.API.Models.Repository
             var code = await _context.GeneratedCodes.Where(x => x.UserEmail == confirmAccount.Email && x.Code == confirmAccount.ConfirmationCode).FirstOrDefaultAsync();
             if (code == null) return new Result<Account>(false, new List<string>() { "Invalid code provided!" });
 
-            account.Status = Status.Unverified;
+            account.Status = Status.Inactive;
             _context.Accounts.Update(account);
-
+            await _context.SaveChangesAsync();
             return new Result<Account>(account, new List<string>(){"Account activated successfully!"});
         }
 
@@ -111,6 +112,9 @@ namespace UserManagement.API.Models.Repository
         {
             var account = await _context.Accounts!.Where(x => x.Email == login.Email).FirstOrDefaultAsync();
 
+            if (account!.Status == Status.Inactive) return new Result<object>(false, new List<string> { "Please create your profile to use this account."});
+            if (account!.Status == Status.Unverified) return new Result<object>(false, new List<string> { "Verify your account with one time password."});
+            
             object? userProfile = account!.AccountType == AccountType.Individual ?
                 await _context.Individuals!.Where(x => x.AccountId == account.Id).FirstOrDefaultAsync() :
                 await _context.Institutions!.Where(x => x.AccountId == account.Id).FirstOrDefaultAsync();
