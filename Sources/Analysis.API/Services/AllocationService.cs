@@ -28,15 +28,21 @@ namespace Analysis.API.Services
                 Returns = new List<Return>()
             };
 
-
-
             var stocks = (await _stockRepository.GetAllAsync()).Data!.ToList();
             var currentYear = DateTime.Now.Year;
 
-            allocation.Returns?.Add(new Return
+            allocation.Returns?.AddRange(new List<Return>()
             {
-                Year = currentYear,
-                CumulatedReturn = allocation.StartingAmount
+                new Return
+                {
+                    CumulatedReturn = 0,
+                    Year = 0
+                },
+                new Return
+                {
+                    Year = currentYear,
+                    CumulatedReturn = allocation.StartingAmount
+                }
             });
 
             for (int i = 0; i < allocation.Period; i++)
@@ -52,8 +58,8 @@ namespace Analysis.API.Services
                 allocation.Returns?.Add(new Return
                 {
                     Year = currentYear,
-                    CumulatedReturn = cumulated + allocation.Returns.LastOrDefault().CumulatedReturn
-                });;
+                    CumulatedReturn = cumulated + allocation.Returns.LastOrDefault()!.CumulatedReturn
+                }); ;
             }
 
             return new Result<Allocation>(allocation);
@@ -67,39 +73,28 @@ namespace Analysis.API.Services
             };
 
             var inititalCost = _random.NextDouble();
-            var predictedCost = inititalCost <= stock.UnitPrice ? inititalCost += stock.MinPrice : stock.MaxPrice - inititalCost;
+            var predictedCost = Math.Round(inititalCost <= stock.UnitPrice ? inititalCost += stock.MinPrice : stock.MaxPrice - inititalCost, 2);
             var percentAllocation = (stock.PercentAllocation / 100) * allocation.StartingAmount;
-            var shares = percentAllocation / predictedCost;
+            var shares = Math.Round(percentAllocation / predictedCost, 2);
             var unitShares = percentAllocation / stock.UnitPrice;
+
+            var returnShare = shares >= unitShares ? (shares - unitShares) * predictedCost : (unitShares - shares) * predictedCost;
 
             switch (allocation.ProfileType)
             {
                 case ProfileType.Conservative:
-                case ProfileType.Moderate:
-                    if (shares >= (percentAllocation / stock.UnitPrice))
-                    {
-                        var profit = (shares - unitShares) * predictedCost;
-                        returns.CumulatedReturn = profit;
-                    }
-                    else
-                    {
-                        var loss = (unitShares - shares) * predictedCost;
-                        returns.CumulatedReturn = loss;
-                    }
+                    returnShare *= 1.5;
                     break;
-                default:
-                    if (shares >= (percentAllocation / stock.UnitPrice))
-                    {
-                        var profit = (shares - unitShares) * predictedCost;
-                        returns.CumulatedReturn = profit;
-                    }
-                    else
-                    {
-                        var loss = (shares - unitShares) * predictedCost;
-                        returns.CumulatedReturn = loss;
-                    }
+                case ProfileType.Moderate:
+                    returnShare *= 2;
+                    break;
+                case ProfileType.Aggressive:
+                    returnShare *= 3;
                     break;
             }
+
+            returnShare = Math.Round(returnShare, 2);
+            returns.CumulatedReturn = returnShare;
             return returns;
         }
     }
