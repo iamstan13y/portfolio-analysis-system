@@ -32,7 +32,7 @@ namespace Analysis.API.Services
 
             var stocks = (await _stockRepository.GetAllAsync()).Data!.ToList();
             var currentYear = DateTime.Now.Year;
-            
+
             allocation.Returns?.Add(new Return
             {
                 Year = currentYear,
@@ -44,7 +44,7 @@ namespace Analysis.API.Services
                 double cumulated = 0;
                 foreach (var stock in stocks)
                 {
-                   cumulated += CalculateYearReturn(stock, allocation, currentYear).CumulatedReturn;
+                    cumulated += CalculateYearReturn(stock, allocation, currentYear).CumulatedReturn;
 
                 }
                 currentYear++;
@@ -52,45 +52,51 @@ namespace Analysis.API.Services
                 allocation.Returns?.Add(new Return
                 {
                     Year = currentYear,
-                    CumulatedReturn = cumulated
-                });
+                    CumulatedReturn = cumulated + allocation.Returns.LastOrDefault().CumulatedReturn
+                });;
             }
 
             return new Result<Allocation>(allocation);
         }
 
-        public Return CalculateYearReturn(Stock stock, Allocation allocation, int currentYear)
+        private Return CalculateYearReturn(Stock stock, Allocation allocation, int currentYear)
         {
             var returns = new Return
             {
                 Year = currentYear
             };
 
-            var shares = _random.Next((int)(allocation.StartingAmount / stock.MaxPrice), (int)(allocation.StartingAmount / stock.MinPrice));
-            var predictedPrice = allocation.StartingAmount / shares;
-            var stockAllocation = (stock.PercentAllocation / 100) * shares;
-            var shareCost = stockAllocation * predictedPrice;
+            var inititalCost = _random.NextDouble();
+            var predictedCost = inititalCost <= stock.UnitPrice ? inititalCost += stock.MinPrice : stock.MaxPrice - inititalCost;
+            var percentAllocation = (stock.PercentAllocation / 100) * allocation.StartingAmount;
+            var shares = percentAllocation / predictedCost;
+            var unitShares = percentAllocation / stock.UnitPrice;
+
             switch (allocation.ProfileType)
             {
                 case ProfileType.Conservative:
                 case ProfileType.Moderate:
-                    if (shareCost >= ((allocation.StartingAmount / stock.UnitPrice) * stock.PercentAllocation) * stock.UnitPrice)
+                    if (shares >= (percentAllocation / stock.UnitPrice))
                     {
-                        returns.CumulatedReturn = (double)(allocation.Returns!.LastOrDefault()!.CumulatedReturn + shareCost);
+                        var profit = (shares - unitShares) * predictedCost;
+                        returns.CumulatedReturn = profit;
                     }
                     else
                     {
-                        returns.CumulatedReturn = allocation.Returns!.LastOrDefault()!.CumulatedReturn - shareCost;
+                        var loss = (unitShares - shares) * predictedCost;
+                        returns.CumulatedReturn = loss;
                     }
                     break;
                 default:
-                    if (shareCost >= ((allocation.StartingAmount / stock.UnitPrice) * stock.PercentAllocation) * stock.UnitPrice)
+                    if (shares >= (percentAllocation / stock.UnitPrice))
                     {
-                        returns.CumulatedReturn = allocation.Returns!.LastOrDefault()!.CumulatedReturn - shareCost;
+                        var profit = (shares - unitShares) * predictedCost;
+                        returns.CumulatedReturn = profit;
                     }
                     else
                     {
-                        returns.CumulatedReturn = allocation.Returns!.LastOrDefault()!.CumulatedReturn + shareCost;
+                        var loss = (shares - unitShares) * predictedCost;
+                        returns.CumulatedReturn = loss;
                     }
                     break;
             }
