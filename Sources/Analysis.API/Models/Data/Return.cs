@@ -3,6 +3,6 @@
     public class Return
     {
         public int Year { get; set; }
-        public double CumulatedReturn { get; set; }
+        public decimal CumulatedReturn { get; set; }
     }
 }

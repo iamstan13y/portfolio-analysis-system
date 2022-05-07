@@ -41,13 +41,13 @@ namespace Analysis.API.Services
                 new Return
                 {
                     Year = currentYear,
-                    CumulatedReturn = allocation.StartingAmount
+                    CumulatedReturn = (decimal)allocation.StartingAmount
                 }
             });
 
             for (int i = 0; i < allocation.Period; i++)
             {
-                double cumulated = 0;
+                decimal cumulated = 0;
                 foreach (var stock in stocks)
                 {
                     cumulated += CalculateYearReturn(stock, allocation, currentYear).CumulatedReturn;
@@ -73,9 +73,9 @@ namespace Analysis.API.Services
             };
 
             var inititalCost = _random.NextDouble();
-            var predictedCost = Math.Round(inititalCost <= stock.UnitPrice ? inititalCost += stock.MinPrice : stock.MaxPrice - inititalCost, 2);
+            var predictedCost = inititalCost <= stock.UnitPrice ? inititalCost += stock.MinPrice : stock.MaxPrice - inititalCost;
             var percentAllocation = (stock.PercentAllocation / 100) * allocation.StartingAmount;
-            var shares = Math.Round(percentAllocation / predictedCost, 2);
+            var shares = percentAllocation / predictedCost;
             var unitShares = percentAllocation / stock.UnitPrice;
 
             var returnShare = shares >= unitShares ? (shares - unitShares) * predictedCost : (unitShares - shares) * predictedCost;
@@ -93,8 +93,7 @@ namespace Analysis.API.Services
                     break;
             }
 
-            returnShare = Math.Round(returnShare, 2);
-            returns.CumulatedReturn = returnShare;
+            returns.CumulatedReturn = Math.Round((decimal)returnShare, 2);
             return returns;
         }
     }
