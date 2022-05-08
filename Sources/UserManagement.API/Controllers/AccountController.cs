@@ -103,5 +103,16 @@ namespace UserManagement.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("account-details/{email}")]
+        [ProducesResponseType(typeof(Result<Account>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result<Account>), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Details(string email)
+        {
+            var result = await _accountRepository.GetDetailsAsync(email);
+
+            if (!result.Success) return NotFound(result);
+            return Ok(result);
+        }
     }
 }

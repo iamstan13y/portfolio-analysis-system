@@ -18,5 +18,6 @@ namespace UserManagement.API.Models.Repository
         Task<Result<Account>> ResetPasswordAsync(ResetPasswordRequest resetPassword);
         Task<Result<Account>> ConfirmAccountAsync(ConfirmAccountRequest confirmAccount);
         Task<Result<string>> ResendOtpAsync(string email);
+        Task<Result<Account>> GetDetailsAsync(string email);
     }
 }

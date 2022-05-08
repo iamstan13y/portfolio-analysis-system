@@ -112,8 +112,8 @@ namespace UserManagement.API.Models.Repository
         {
             var account = await _context.Accounts!.Where(x => x.Email == login.Email).FirstOrDefaultAsync();
 
-            if (account!.Status == Status.Inactive) return new Result<object>(false, new List<string> { "Please create your profile to use this account."});
-            if (account!.Status == Status.Unverified) return new Result<object>(false, new List<string> { "Verify your account with one time password."});
+            if (account!.Status == Status.Inactive) return new Result<object>(false, account, new List<string> { "Please create your profile to use this account."});
+            if (account!.Status == Status.Unverified) return new Result<object>(false, account, new List<string> { "Verify your account with one time password."});
             
             object? userProfile = account!.AccountType == AccountType.Individual ?
                 await _context.Individuals!.Where(x => x.AccountId == account.Id).FirstOrDefaultAsync() :
@@ -229,6 +229,14 @@ namespace UserManagement.API.Models.Repository
             await _context.SaveChangesAsync();
 
             return new Result<Account>(account, new List<string> { "Your password has been resetted successfully." });
+        }
+
+        public async Task<Result<Account>> GetDetailsAsync(string email)
+        {
+            var account = await _context.Accounts!.Where(x => x.Email == email).FirstOrDefaultAsync();
+            if (account == null) return new Result<Account>(false, new List<string> { "Account does not exist"});
+
+            return new Result<Account>(account);
         }
     }
 }
