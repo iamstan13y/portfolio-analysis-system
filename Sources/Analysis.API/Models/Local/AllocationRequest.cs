@@ -9,5 +9,6 @@ namespace Analysis.API.Models.Local
         public ProfileType ProfileType { get; set; }
         public double StartingAmount { get; set; }
         public int Period { get; set; }
+        public List<int>? SelectedCompanies { get; set; }
     }
 }

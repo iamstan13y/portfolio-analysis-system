@@ -1,7 +1,7 @@
-﻿using Analysis.API.Models.Data;
+﻿using Analysis.API.Enums;
+using Analysis.API.Models.Data;
 using Analysis.API.Models.Local;
 using Analysis.API.Models.Repository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Analysis.API.Controllers
@@ -12,10 +12,7 @@ namespace Analysis.API.Controllers
     {
         private readonly IStockRepository _stockRepository;
 
-        public StocksController(IStockRepository stockRepository)
-        {
-            _stockRepository = stockRepository;
-        }
+        public StocksController(IStockRepository stockRepository) => _stockRepository = stockRepository;
 
         [HttpGet]
         public async Task<IActionResult> Get() => Ok(await _stockRepository.GetAllAsync());
@@ -26,14 +23,23 @@ namespace Analysis.API.Controllers
             var result = await _stockRepository.AddAsync(new Stock
             {
                 CompanyName = request.CompanyName,
+                CompanyCode = request.CompanyCode,
                 UnitPrice = request.UnitPrice,
                 MinPrice = request.MinPrice,
-                MaxPrice = request.MaxPrice
+                MaxPrice = request.MaxPrice,
+                Category = request.Category,
+                PercentageRisk = request.PercentageRisk
             });
 
             if (!result.Success) return BadRequest(result);
 
             return Ok(result);
         }
+
+        [HttpGet("category/{categoryId}")]
+        public async Task<IActionResult> Get(StockCategory categoryId) => Ok(await _stockRepository.GetByCategoryIdAsync(categoryId));
+
+        [HttpGet("category-and-profile/{categoryId}/{profileType}")]
+        public async Task<IActionResult> Get(StockCategory categoryId, ProfileType profileType) => Ok(await _stockRepository.GetByCategoryIdAndProfileAsync(categoryId, profileType));
     }
 }
