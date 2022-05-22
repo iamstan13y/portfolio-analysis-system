@@ -10,5 +10,6 @@ namespace Analysis.API.Models.Data
         public double StartingAmount { get; set; }
         public int Period { get; set; }
         public List<Return>? Returns { get; set; }
+        public List<AllocationBreakdown> Breakdown { get; set; }
     }
 }
