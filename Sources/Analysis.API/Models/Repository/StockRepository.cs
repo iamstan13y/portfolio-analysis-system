@@ -34,6 +34,13 @@ namespace Analysis.API.Models.Repository
             return new Result<IEnumerable<Stock>>(stocks);
         }
 
+        public async Task<Result<IEnumerable<Stock>>> GetByCategoryIdAsync(int categoryId)
+        {
+            var stocks = await _context.Stocks!.Where(x => (int)x.Category == categoryId).ToListAsync();
+            
+            return new Result<IEnumerable<Stock>>(stocks);
+        }
+
         public Task<Result<Stock>> UpdateAsync(Stock stock)
         {
             throw new NotImplementedException();

@@ -34,5 +34,8 @@ namespace Analysis.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("category/{categoryId}")]
+        public async Task<IActionResult> Get(int categoryId) => Ok(await _stockRepository.GetByCategoryIdAsync(categoryId));
     }
 }
