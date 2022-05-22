@@ -35,9 +35,9 @@ namespace Analysis.API.Models.Repository
             return new Result<IEnumerable<Stock>>(stocks);
         }
 
-        public async Task<Result<IEnumerable<Stock>>> GetByCategoryIdAndProfileAsync(int categoryId, ProfileType profileType)
+        public async Task<Result<IEnumerable<Stock>>> GetByCategoryIdAndProfileAsync(StockCategory category, ProfileType profileType)
         {
-            var stocks = (await GetByCategoryIdAsync(categoryId)).Data;
+            var stocks = (await GetByCategoryIdAsync(category)).Data;
 
             switch (profileType)
             {
@@ -55,9 +55,9 @@ namespace Analysis.API.Models.Repository
             return new Result<IEnumerable<Stock>>(stocks!);
         }
 
-        public async Task<Result<IEnumerable<Stock>>> GetByCategoryIdAsync(int categoryId)
+        public async Task<Result<IEnumerable<Stock>>> GetByCategoryIdAsync(StockCategory categoryId)
         {
-            var stocks = await _context.Stocks!.Where(x => (int)x.Category == categoryId).ToListAsync();
+            var stocks = await _context.Stocks!.Where(x => x.Category == categoryId).ToListAsync();
 
             return new Result<IEnumerable<Stock>>(stocks);
         }

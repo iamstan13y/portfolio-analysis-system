@@ -37,9 +37,9 @@ namespace Analysis.API.Controllers
         }
 
         [HttpGet("category/{categoryId}")]
-        public async Task<IActionResult> Get(int categoryId) => Ok(await _stockRepository.GetByCategoryIdAsync(categoryId));
+        public async Task<IActionResult> Get(StockCategory categoryId) => Ok(await _stockRepository.GetByCategoryIdAsync(categoryId));
 
         [HttpGet("category-and-profile/{categoryId}/{profileType}")]
-        public async Task<IActionResult> Get(int categoryId, ProfileType profileType) => Ok(await _stockRepository.GetByCategoryIdAndProfileAsync(categoryId, profileType));
+        public async Task<IActionResult> Get(StockCategory categoryId, ProfileType profileType) => Ok(await _stockRepository.GetByCategoryIdAndProfileAsync(categoryId, profileType));
     }
 }

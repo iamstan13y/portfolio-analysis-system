@@ -9,7 +9,7 @@ namespace Analysis.API.Models.Repository
         Task<Result<IEnumerable<Stock>>> GetAllAsync();
         Task<Result<Stock>> AddAsync(Stock stock);
         Task<Result<Stock>> UpdateAsync(Stock stock);
-        Task<Result<IEnumerable<Stock>>> GetByCategoryIdAsync(int categoryId);
-        Task<Result<IEnumerable<Stock>>> GetByCategoryIdAndProfileAsync(int categoryId, ProfileType profileType);
+        Task<Result<IEnumerable<Stock>>> GetByCategoryIdAsync(StockCategory categoryId);
+        Task<Result<IEnumerable<Stock>>> GetByCategoryIdAndProfileAsync(StockCategory category, ProfileType profileType);
     }
 }
