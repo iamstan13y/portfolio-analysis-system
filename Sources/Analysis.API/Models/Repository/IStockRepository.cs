@@ -1,4 +1,5 @@
-﻿using Analysis.API.Models.Data;
+﻿using Analysis.API.Enums;
+using Analysis.API.Models.Data;
 using ModelLibrary;
 
 namespace Analysis.API.Models.Repository
@@ -9,5 +10,6 @@ namespace Analysis.API.Models.Repository
         Task<Result<Stock>> AddAsync(Stock stock);
         Task<Result<Stock>> UpdateAsync(Stock stock);
         Task<Result<IEnumerable<Stock>>> GetByCategoryIdAsync(int categoryId);
+        Task<Result<IEnumerable<Stock>>> GetByCategoryIdAndProfileAsync(int categoryId, ProfileType profileType);
     }
 }
