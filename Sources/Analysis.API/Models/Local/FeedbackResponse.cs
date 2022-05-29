@@ -3,9 +3,9 @@
     public class FeedbackResponse
     {
         public int TotalRating { get; set; }
-        public double AverageRating { get; set; }
+        public decimal AverageRating { get; set; }
         
-        public FeedbackResponse(int totalRating, int averageRating)
+        public FeedbackResponse(int totalRating, decimal averageRating)
         {
             TotalRating = totalRating;
             AverageRating = averageRating;

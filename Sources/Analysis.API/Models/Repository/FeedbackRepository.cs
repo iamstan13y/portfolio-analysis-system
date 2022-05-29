@@ -1,5 +1,6 @@
 ﻿using Analysis.API.Models.Data;
 using Analysis.API.Models.Local;
+using Microsoft.EntityFrameworkCore;
 using ModelLibrary;
 
 namespace Analysis.API.Models.Repository
@@ -18,9 +19,20 @@ namespace Analysis.API.Models.Repository
             return new Result<Feedback>(feedback);
         }
 
-        public Task<Result<FeedbackResponse>> GetAllAsync()
+        public async Task<Result<FeedbackResponse>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var feedback = await _context.Feedback!.ToListAsync();
+            double totalRating = 0;
+            
+            feedback.ForEach(x =>
+            {
+                totalRating += x.Rating;
+            });
+            
+            decimal avgRating = (decimal)totalRating / feedback.Count;
+
+            var response = new FeedbackResponse(feedback.Count, Math.Round(avgRating, 1));
+            return new Result<FeedbackResponse>(response);
         }
     }
 }
