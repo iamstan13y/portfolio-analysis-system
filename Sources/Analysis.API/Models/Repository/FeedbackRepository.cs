@@ -6,9 +6,16 @@ namespace Analysis.API.Models.Repository
 {
     public class FeedbackRepository : IFeedbackRepository
     {
-        public Task<Result<Feedback>> AddAsync(Feedback feedback)
+        private readonly AppDbContext _context;
+
+        public FeedbackRepository(AppDbContext context) => _context = context;
+      
+        public async Task<Result<Feedback>> AddAsync(Feedback feedback)
         {
-            throw new NotImplementedException();
+            await _context.Feedback!.AddAsync(feedback);
+            await _context.SaveChangesAsync();
+
+            return new Result<Feedback>(feedback);
         }
 
         public Task<Result<FeedbackResponse>> GetAllAsync()
