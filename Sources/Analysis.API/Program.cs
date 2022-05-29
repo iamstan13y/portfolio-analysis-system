@@ -14,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 
 builder.Services.AddCors(options =>
 {
