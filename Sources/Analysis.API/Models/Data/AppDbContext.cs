@@ -10,5 +10,6 @@ namespace Analysis.API.Models.Data
         }
 
         public DbSet<Stock>? Stocks { get; set; }
+        public DbSet<Feedback>? Feedback { get; set; }
     }
 }
