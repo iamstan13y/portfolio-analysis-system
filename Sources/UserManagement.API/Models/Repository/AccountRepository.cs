@@ -157,11 +157,12 @@ namespace UserManagement.API.Models.Repository
             var account = await _context.Accounts!.Where(x => x.Email!.Equals(email)).FirstOrDefaultAsync();
             if (account == null) return new Result<string>(false, new List<string>() { "Please ensure you have recently created an account with us!" });
 
-            var otpCode = await _context.GeneratedCodes!.Where(x => x.UserEmail == email && x.DateCreated.AddMinutes(5) >= DateTime.Now).FirstOrDefaultAsync();
+            GeneratedCode? otpCode = await _context.GeneratedCodes!.Where(x => x.UserEmail == email && x.DateCreated.AddMinutes(5) >= DateTime.Now).FirstOrDefaultAsync();
 
             if (otpCode == null)
             {
-                otpCode!.Code = await _codeGeneratorService.GenerateVerificationCode();
+                otpCode = new();
+                otpCode.Code = await _codeGeneratorService.GenerateVerificationCode();
 
                 await _context.GeneratedCodes!.AddAsync(new GeneratedCode
                 {
