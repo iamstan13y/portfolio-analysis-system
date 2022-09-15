@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  analysis.api:
+    image: ${DOCKER_REGISTRY-}analysisapi
+    build:
+      context: .
+      dockerfile: Sources/Analysis.API/Dockerfile
