@@ -4,7 +4,7 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
+WORKDIR /app
 COPY ["./Sources/Analysis.API/Analysis.API.csproj", "./Sources/Analysis.API/"]
 COPY ["./Sources/ModelLibrary/ModelLibrary.csproj", "./Sources/ModelLibrary/"]
 RUN dotnet restore "./Sources/Analysis.API/Analysis.API.csproj"
