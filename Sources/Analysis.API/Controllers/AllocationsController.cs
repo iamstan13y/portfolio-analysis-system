@@ -1,6 +1,5 @@
 ﻿using Analysis.API.Models.Local;
 using Analysis.API.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Analysis.API.Controllers

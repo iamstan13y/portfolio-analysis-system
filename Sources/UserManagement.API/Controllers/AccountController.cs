@@ -1,11 +1,9 @@
-﻿using UserManagement.API.Enums;
+﻿using Microsoft.AspNetCore.Mvc;
+using ModelLibrary;
+using UserManagement.API.Enums;
 using UserManagement.API.Models;
 using UserManagement.API.Models.Data;
 using UserManagement.API.Models.Repository;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using ModelLibrary;
 
 namespace UserManagement.API.Controllers
 {
@@ -21,7 +19,7 @@ namespace UserManagement.API.Controllers
         }
 
         [HttpPost("sign-up")]
-        [ProducesResponseType(typeof(Result<Account>),  StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result<Account>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateAccount([FromBody] AccountRequest request)
         {
             var result = await _accountRepository.CreateAsync(new Account
@@ -30,11 +28,11 @@ namespace UserManagement.API.Controllers
                 Email = request.Email,
                 Password = request.Password,
                 PhoneNumber = request.PhoneNumber,
-                Status =  Status.Unverified,
+                Status = Status.Unverified,
                 DateCreated = DateTime.Now,
             });
 
-            
+
             return Ok(result);
         }
 
@@ -57,7 +55,7 @@ namespace UserManagement.API.Controllers
 
             if (!result.Success)
                 return StatusCode(StatusCodes.Status403Forbidden, result);
-            
+
             return Ok(result);
         }
 

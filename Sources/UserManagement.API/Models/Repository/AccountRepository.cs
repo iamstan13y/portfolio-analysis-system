@@ -1,14 +1,9 @@
-﻿using UserManagement.API.Models.Data;
-using UserManagement.API.Enums;
-using UserManagement.API.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
 using ModelLibrary;
 using ModelLibrary.Enums;
+using UserManagement.API.Enums;
+using UserManagement.API.Models.Data;
+using UserManagement.API.Services;
 
 namespace UserManagement.API.Models.Repository
 {
@@ -53,15 +48,15 @@ namespace UserManagement.API.Models.Repository
                 });
 
                 await _context.SaveChangesAsync();
-                
+
                 await _emailService.SendEmailAsync(new EmailRequest
                 {
-                      To = account.Email,
-                      Subject = _configuration["EmailService:ConfirmAccountSubject"],
-                      Body = string.Format(_configuration["EmailService:ConfirmAccountBody"], "", code)  
+                    To = account.Email,
+                    Subject = _configuration["EmailService:ConfirmAccountSubject"],
+                    Body = string.Format(_configuration["EmailService:ConfirmAccountBody"], "", code)
                 });
 
-                return new Result<Account>(account, new List<string> { "Account created successfully!"});
+                return new Result<Account>(account, new List<string> { "Account created successfully!" });
             }
             catch (Exception ex)
             {
@@ -97,7 +92,7 @@ namespace UserManagement.API.Models.Repository
         public async Task<Result<Account>> ConfirmAccountAsync(ConfirmAccountRequest confirmAccount)
         {
             var account = await _context.Accounts.Where(tsuro => tsuro.Email == confirmAccount.Email).FirstOrDefaultAsync();
-            if (account == null) return new Result<Account>(false, new List<string>(){"User account not found!"});
+            if (account == null) return new Result<Account>(false, new List<string>() { "User account not found!" });
 
             var code = await _context.GeneratedCodes.Where(x => x.UserEmail == confirmAccount.Email && x.Code == confirmAccount.ConfirmationCode).FirstOrDefaultAsync();
             if (code == null) return new Result<Account>(false, new List<string>() { "Invalid code provided!" });
@@ -105,16 +100,16 @@ namespace UserManagement.API.Models.Repository
             account.Status = Status.Inactive;
             _context.Accounts.Update(account);
             await _context.SaveChangesAsync();
-            return new Result<Account>(account, new List<string>(){"Account activated successfully!"});
+            return new Result<Account>(account, new List<string>() { "Account activated successfully!" });
         }
 
         public async Task<Result<object>> LoginAsync(LoginRequest login)
         {
             var account = await _context.Accounts!.Where(x => x.Email == login.Email).FirstOrDefaultAsync();
 
-            if (account!.Status == Status.Inactive) return new Result<object>(false, account, new List<string> { "Please create your profile to use this account."});
-            if (account!.Status == Status.Unverified) return new Result<object>(false, account, new List<string> { "Verify your account with one time password."});
-            
+            if (account!.Status == Status.Inactive) return new Result<object>(false, account, new List<string> { "Please create your profile to use this account." });
+            if (account!.Status == Status.Unverified) return new Result<object>(false, account, new List<string> { "Verify your account with one time password." });
+
             object? userProfile = account!.AccountType == AccountType.Individual ?
                 await _context.Individuals!.Where(x => x.AccountId == account.Id).FirstOrDefaultAsync() :
                 await _context.Institutions!.Where(x => x.AccountId == account.Id).FirstOrDefaultAsync();
@@ -235,7 +230,7 @@ namespace UserManagement.API.Models.Repository
         public async Task<Result<Account>> GetDetailsAsync(string email)
         {
             var account = await _context.Accounts!.Where(x => x.Email == email).FirstOrDefaultAsync();
-            if (account == null) return new Result<Account>(false, new List<string> { "Account does not exist"});
+            if (account == null) return new Result<Account>(false, new List<string> { "Account does not exist" });
 
             return new Result<Account>(account);
         }
