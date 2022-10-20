@@ -13,8 +13,8 @@ namespace Analysis.API.Controllers
         public FeedbackController(IFeedbackRepository feedbackRepository) => _feedbackRepository = feedbackRepository;
 
         [HttpPost]
-        public async Task<IActionResult> Post(int rating) => 
-            Ok(await _feedbackRepository.AddAsync(new Feedback { Rating = rating}));
+        public async Task<IActionResult> Post(int rating) =>
+            Ok(await _feedbackRepository.AddAsync(new Feedback { Rating = rating }));
 
         [HttpGet]
         public async Task<IActionResult> Get() => Ok(await _feedbackRepository.GetAllAsync());
