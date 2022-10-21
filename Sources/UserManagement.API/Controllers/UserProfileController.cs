@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UserManagement.API.Models;
 using UserManagement.API.Models.Data;
 using UserManagement.API.Models.Repository;
@@ -43,7 +42,7 @@ namespace UserManagement.API.Controllers
                 AccountId = request.AccountId,
                 Address = request.Address,
                 InsitutionName = request.InstitutionName,
-                DateCreated= DateTime.Now
+                DateCreated = DateTime.Now
             });
 
             if (result.Success == false) return BadRequest(result);
