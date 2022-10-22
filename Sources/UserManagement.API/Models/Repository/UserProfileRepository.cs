@@ -17,9 +17,9 @@ namespace UserManagement.API.Models.Repository
         public async Task<Result<Individual>> CreateIndividualAsync(Individual individual)
         {
             await _context.Individuals!.AddAsync(individual);
-            
-            if(await ActivateAccount(individual.AccountId) == false)
-                return new Result<Individual>(false, new List<string> { "Failed to save details."});
+
+            if (await ActivateAccount(individual.AccountId) == false)
+                return new Result<Individual>(false, new List<string> { "Failed to save details." });
 
             return new Result<Individual>(individual);
         }
@@ -28,8 +28,8 @@ namespace UserManagement.API.Models.Repository
         {
             await _context.Institutions!.AddAsync(institution);
 
-            if(await ActivateAccount(institution.AccountId) == false)
-                return new Result<Institution>(false, new List<string> { "Failed to save details."});
+            if (await ActivateAccount(institution.AccountId) == false)
+                return new Result<Institution>(false, new List<string> { "Failed to save details." });
 
             return new Result<Institution>(institution);
         }
@@ -39,7 +39,7 @@ namespace UserManagement.API.Models.Repository
             var account = await _context.Accounts!.Where(k => k.Id == accountId).FirstOrDefaultAsync();
             if (account == null) return false;
 
-            account.Status = Status.Active;   
+            account.Status = Status.Active;
             _context.Accounts!.Update(account);
             await _context.SaveChangesAsync();
             return true;
