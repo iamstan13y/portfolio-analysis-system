@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace UserManagement.API.Services
+﻿namespace UserManagement.API.Services
 {
     public interface ICodeGeneratorService
     {
