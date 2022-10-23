@@ -1,11 +1,7 @@
-﻿using UserManagement.API.Models.Data;
+﻿using ModelLibrary;
 using System.Net;
 using System.Net.Mail;
-using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using ModelLibrary;
+using UserManagement.API.Models.Data;
 
 namespace UserManagement.API.Services
 {
