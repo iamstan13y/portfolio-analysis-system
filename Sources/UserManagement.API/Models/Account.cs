@@ -1,8 +1,7 @@
-﻿using UserManagement.API.Enums;
+﻿using ModelLibrary.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System;
-using ModelLibrary.Enums;
+using UserManagement.API.Enums;
 
 namespace UserManagement.API.Models
 {
