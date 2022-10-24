@@ -1,9 +1,8 @@
-﻿using UserManagement.API.Models;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
+using UserManagement.API.Models;
 
 namespace UserManagement.API.Services
 {
@@ -34,7 +33,7 @@ namespace UserManagement.API.Services
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             account.Token = tokenHandler.WriteToken(token);
-         
+
             return Task.FromResult(account.Token);
         }
     }
